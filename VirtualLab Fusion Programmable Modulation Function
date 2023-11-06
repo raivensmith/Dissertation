@@ -1,0 +1,58 @@
+#region Preset using directives
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;			  
+using VirtualLab.Programming;
+using VirtualLabAPI.Core.BasicFunctions;
+using VirtualLabAPI.Core.Common;
+using VirtualLabAPI.Core.DataVisualization;
+using VirtualLabAPI.Core.FieldRepresentations;
+using VirtualLabAPI.Core.Functions;
+using VirtualLabAPI.Core.GeometryDescription;
+using VirtualLabAPI.Core.LightPath;
+using VirtualLabAPI.Core.Materials;
+using VirtualLabAPI.Core.Modules;
+using VirtualLabAPI.Core.Numerics;
+using VirtualLabAPI.Core.Numerics.Region2D;
+using VirtualLabAPI.Core.OpticalSystems;
+using VirtualLabAPI.Core.Propagation;
+using VirtualLabAPI.Core.SupportFunctions;							  
+#endregion
+#region Additional using directives
+#endregion
+public class VLModule : ISnippetArrayDouble__Double_x_Double_y {			
+	#region Global Parameters
+	public double yValueAtStart = 0.0016;
+	public double yValueAtEnd = 0.0204;
+	public double fillFactorAtStart = 0.483394751748509;
+	public double fillFactorAtEnd = 0.64386;
+	public double heightAtStart = 3.0269E-07;
+	public double heightAtEnd = 5.2318E-07;						
+	#endregion
+	public double[] GetData(double x, double y) {						
+		#region Main method
+		double numerFillFactor = fillFactorAtEnd - fillFactorAtStart;
+		double numerHeight = heightAtEnd - heightAtStart;
+		double denom = yValueAtEnd - yValueAtStart;
+		double[] returnValue = new double[2];
+		// Add information about the parameter variation here.
+		if (denom == 0) {
+			returnValue[0] = 0;
+			returnValue[1] = 0;
+		}
+		else {
+			double slopeFillFactor = numerFillFactor / denom;
+			double bFillFactor = fillFactorAtEnd - slopeFillFactor * yValueAtEnd;
+			returnValue[0] = slopeFillFactor * y + bFillFactor;
+			double slopeHeight = numerHeight / denom;
+			double bHeight = heightAtEnd - slopeHeight * yValueAtEnd;
+			returnValue[1] = slopeHeight * y + bHeight;
+		}
+		return returnValue;
+		#endregion
+	}
+	#region Snippet body
+	#endregion
+}
