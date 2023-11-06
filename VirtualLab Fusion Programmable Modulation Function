@@ -56,3 +56,4 @@ public class VLModule : ISnippetArrayDouble__Double_x_Double_y {
 	#region Snippet body
 	#endregion
 }
+
